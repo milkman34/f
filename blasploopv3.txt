@@ -1,0 +1,78 @@
+// ==UserScript==
+// @name         blasploop
+// @version      3
+// @description  -
+// @author       blaspious
+// @match        https://sploop.io
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    const styleElement = document.head.appendChild(document.createElement('style'));
+    styleElement.type = 'text/css';
+    styleElement.appendChild(document.createTextNode(`#cross-promo, #bottom-wrap, #google_play, #game-left-content-main, #game-bottom-content, #game-right-content-main, #right-content { display: none !important; }`));
+
+    const gameContent = document.querySelector('#game-content');
+    gameContent.style.justifyContent = 'center';
+
+    const mainContent = document.querySelector('#main-content');
+    mainContent.style.width = 'auto';
+
+    const popUi = document.getElementById('pop-ui');
+    popUi.style.opacity = '0.5';
+
+    const homepage = document.getElementById('homepage');
+    homepage.style.opacity = '0.5';
+
+    const rankingMiddleMain = document.getElementById('ranking-middle-main');
+    rankingMiddleMain.style.height = '380px';
+
+    const rankingRanksContainer = document.getElementById('ranking-ranks-container');
+    rankingRanksContainer.style.height = '295px';
+
+    const ranking2MiddleMain = document.getElementById('ranking2-middle-main');
+    ranking2MiddleMain.style.height = '380px';
+
+    const rankingRankContainer = document.getElementById('ranking-rank-container');
+    rankingRankContainer.style.height = '295px';
+
+    const profileLeftMain = document.getElementById('profile-left-main');
+    profileLeftMain.style.width = '650px';
+
+    const changeUsername = document.getElementById('change-username');
+    changeUsername.style.width = '200px';
+
+    const hatMenu = document.getElementById('hat-menu');
+    hatMenu.style.opacity = '0.5';
+    hatMenu.style.height = "345px";
+    hatMenu.style.background = "rgb(40 45 34 / 0%)";
+    hatMenu.style.border = "5px solid #14141400";
+
+    const clanMenu = document.getElementById('clan-menu');
+    clanMenu.style.opacity = '0.5';
+
+    const gridToggle = document.querySelector('#grid-toggle');
+    gridToggle.click();
+
+    const displayPingToggle = document.querySelector('#display-ping-toggle');
+    displayPingToggle.click();
+
+    const popBoxes = document.querySelectorAll('.pop-box');
+    popBoxes.forEach((box) => {
+    box.style.boxShadow = "inset 0 4px 0 #4e564500, inset 0 -4px 0 #38482500, 0px 2px 0 5px rgb(20 20 20 / 0%), 0px 0px 0 15px rgb(20 20 20 / 0%)";
+    });
+
+    const popCloseButtons = document.querySelectorAll('.pop-close-button');
+    popCloseButtons.forEach((button) => {
+    button.remove();
+    });
+
+    const popHomepage = document.getElementById('homepage');
+    document.addEventListener('keydown', e => {
+    if (e.key === 'Alt' && popHomepage) {
+    popHomepage.style.display = (popHomepage.style.display === 'flex' || popHomepage.style.display === '') ? 'none' : 'flex';
+    e.preventDefault();
+    e.stopPropagation();
+    }});
+})();
