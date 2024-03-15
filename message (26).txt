@@ -1,0 +1,105 @@
+// ==UserScript==
+// @name         MooMoo.io | 🎮KS Mod🎇 | auto kill message with sound
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  próba podbicia świata!
+// @author       KoKsus (xX_KSGaming_Xx)
+// @match        *://*.moomoo.io/*
+// @match        *://sandbox.moomoo.io/*
+// @require      https://greasyfork.org/scripts/423602-msgpack/code/msgpack.js?version=1005014
+// @icon         https://imgur.com/UNUydQo.png
+// @grant        none
+// ==/UserScript==
+
+const msgpack5 = window.msgpack;
+
+let ws,
+    prevCount = 0;
+
+const attachWebSocketListener = (e) => {
+    e.addEventListener("message", hookWS);
+};
+
+const hookWS = (e) => {
+    // Tutaj możesz dodać akcje związane z wiadomościami WebSocket
+};
+
+const sendPacket = (e) => {
+    if (ws) {
+        ws.send(msgpack5.encode(e));
+    }
+};
+
+const chat = (e) => {
+    sendPacket(["6", [e]]);
+};
+
+const playSound = (url) => {
+    // Element audio
+    const audioElement = document.createElement("audio");
+    audioElement.src = url;
+    audioElement.play();
+};
+
+const reattachWebSocketListener = () => {
+    ws.removeEventListener("message", hookWS);
+    attachWebSocketListener(ws);
+};
+
+WebSocket.prototype.oldSend = WebSocket.prototype.send;
+WebSocket.prototype.send = function (e) {
+    if (!ws) {
+        [document.ws, ws] = [this, this];
+        attachWebSocketListener(this);
+    }
+    this.oldSend(e);
+};
+
+const handleMutations = (mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.target.id === "killCounter") {
+            const count = parseInt(mutation.target.innerText, 10) || 0;
+            if (count > prevCount) {
+                playSound("https://cdn.discordapp.com/attachments/1197160948461477918/1197160972087996476/CS_GO_-_Music_KIT_Bachram_By_Austin_Wintory.mp3?ex=65ccb709&is=65ba4209&hm=2e2e381cf43d6fb8faca9f79ab9b8391b1731a96f6a89cc0f96f238ee3744f95&"); // Zastąp tym odpowiednią ścieżką do swojego dźwięku
+                chat("Lmao Legit Kill u!");
+                setTimeout(() => {
+                    chat('xDDD +1 Kill :Skull:');
+                }, 1000); // Opóźnienie w milisekundach (tutaj 2000 ms = 2 sekundy)
+                prevCount = count;
+            }
+        } else if (mutation.target.id === "deathScreen") {
+            reattachWebSocketListener();
+        }
+    }
+};
+
+const observer = new MutationObserver(handleMutations);
+observer.observe(document, {
+    subtree: true,
+    childList: true,
+});
+
+// Dodajemy obsługę zdarzeń dla klawiatury
+document.addEventListener('keydown', function(event) {
+    // Sprawdzamy, czy aktywny element nie jest polem czatu ('chatBox')
+    if (document.activeElement.id !== 'chatBox') {
+        if (event.key === 'o' || event.key === 'O') {
+            chat('Send Nudes Plz');
+            setTimeout(() => {
+                chat('Love BooBs');
+            }, 1000); // Opóźnienie w milisekundach (tutaj 1000 ms = 1 sekunda)
+        }
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    // Sprawdzamy, czy aktywny element nie jest polem czatu ('chatBox')
+    if (document.activeElement.id !== 'chatBox') {
+        if (event.key === 'End' || event.key === 'End') {
+            chat('.Hat');
+            setTimeout(() => {
+                chat('');
+            }, 2000); // Opóźnienie w milisekundach (tutaj 1000 ms = 1 sekunda)
+        }
+    }
+});
